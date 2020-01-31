@@ -2,8 +2,6 @@
 
 Terraform:
 
-TFVARS needed:
-
 buckets = {
 us-east-1 = "snapshots-tool-aurora-us-east-1"
 us-west-2 = "snapshots-tool-aurora-us-west-2"
