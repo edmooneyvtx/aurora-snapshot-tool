@@ -143,7 +143,7 @@ data "aws_iam_policy_document" "sns_dest_topic_allow_policy" {
 # ==============   Resources needed:
 
 
-      
+/*
       "alarmcwCopyFailedDest": {
 			"Type": "AWS::CloudWatch::Alarm",
 			"Properties": {
@@ -151,6 +151,49 @@ data "aws_iam_policy_document" "sns_dest_topic_allow_policy" {
         "alarmcwDeleteOldFailedDest": {
 			"Type": "AWS::CloudWatch::Alarm",
 			"Condition": "DeleteOld",
+		
+		
+- complete... below when resources filled out.
+		
+*/		
+
+		
+resource "aws_cloudwatch_metric_alarm" "copy_failed" {
+	alarm_description  =  "DB Copy to destination status",
+	actions_enabled  =  "true",
+	comparison_operator  =  "GreaterThanOrEqualToThreshold",
+	evaluation_periods  =  "1",
+	metric_name  =  "ExecutionsFailed",
+	namespace  =  "AWS/States",
+	period  =  "300",
+	statistic  =  "Sum",
+	threshold  =  "2.0",
+	treatMissingData  =  "ignore",
+	alarm_actions = "@todo"
+	ok_actions = "@todo"
+	insufficient_data_actions = [@todo]
+	dimensions = [ @todo
+		name = "StateMachineArn"
+		value = "${"Ref: statemachineCopySnapshotsDestAurora"}"
+	]
+
+}
+
+
+resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
+	alarm_name                = "delete_old_failed"
+	comparison_operator       = "GreaterThanOrEqualToThreshold"
+	evaluation_periods        = "2"
+	metric_name               = "CPUUtilization"
+	namespace                 = "AWS/EC2"
+	period                    = "120"
+	statistic                 = "Average"
+	threshold                 = "80"
+	alarm_description         = "This metric monitors ec2 cpu utilization"
+	insufficient_data_actions = []
+}
+		
+		
           
           "iamroleSnapshotsAurora": {
 			"Type": "AWS::IAM::Role",
