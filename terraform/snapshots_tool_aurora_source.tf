@@ -1,6 +1,6 @@
-# 
 
-Terraform:
+
+# Terraform:
 
 buckets = {
 us-east-1 = "snapshots-tool-aurora-us-east-1"
@@ -19,6 +19,66 @@ ap-northeast-2 = "snapshots-tool-aurora-ap-northeast-2"
 ca-central-1 = "snapshots-tool-aurora-ca-central-1"
 sa-east-1 = "snapshots-tool-aurora-sa-east-1"
 }
+
+# sns allow 
+/*
+	"snsTopicSnapshotsAuroraToolDest": {
+	"Condition": "SNSTopicIsEmpty",
+	"Type": "AWS::SNS::Topic",
+
+	"snspolicySnapshotsAuroraDest": {
+	"Condition": "SNSTopicIsEmpty",
+	"Type": "AWS::SNS::TopicPolicy",
+*/
+			
+# sns allow topic
+resource "aws_sns_topic" "sns_dest_topic_allow" {
+  name = "sns_dest_topic_allow"
+}
+
+resource "aws_sns_topic_policy" "default" {
+  arn = "${sns_dest_topic_allow.arn}"
+  policy = "${data.aws_iam_policy_document.sns_dest_topic_allow_policy.json}"
+}
+
+
+			
+# sns allow policy doc. json
+data "aws_iam_policy_document" "sns_dest_topic_allow_policy" {
+    policy_id = "__default_policy_ID"
+    effect = "Allow"
+    principals {
+        type = "AWS"
+        identifiers = ["*"]
+    }
+
+    statement {
+        actions = [
+            "SNS:GetTopicAttributes",
+            "SNS:SetTopicAttributes",
+            "SNS:AddPermission",
+            "SNS:RemovePermission",
+            "SNS:DeleteTopic",
+            "SNS:Subscribe",
+            "SNS:ListSubscriptionsByTopic",
+            "SNS:Publish",
+            "SNS:Receive",
+        ]
+    
+        condition {
+            test = "StringEquals"
+            variable = "AWS:SourceOwner"
+        # confirm w/ role switch
+            values = [
+                var.account_id,
+            ]
+        }
+    }
+}
+		
+/* end sns allow */		
+		
+
 
 
 
@@ -83,14 +143,6 @@ sa-east-1 = "snapshots-tool-aurora-sa-east-1"
 # ==============   Resources needed:
 
 
-
-		"snsTopicSnapshotsAuroraToolDest": {
-			"Condition": "SNSTopicIsEmpty",
-			"Type": "AWS::SNS::Topic",
-      
-  	"snspolicySnapshotsAuroraDest": {
-			"Condition": "SNSTopicIsEmpty",
-			"Type": "AWS::SNS::TopicPolicy",
       
       "alarmcwCopyFailedDest": {
 			"Type": "AWS::CloudWatch::Alarm",
