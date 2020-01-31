@@ -2,7 +2,23 @@
 # vars
 
 
-
+buckets = {
+us-east-1 = "snapshots-tool-aurora-us-east-1"
+us-west-2 = "snapshots-tool-aurora-us-west-2"
+us-east-2 = "snapshots-tool-aurora-us-east-2"
+ap-southeast-2 = "snapshots-tool-aurora-ap-southeast-2"
+ap-northeast-1 = "snapshots-tool-aurora-ap-northeast-1"
+eu-west-1 = "snapshots-tool-aurora-eu-west-1"
+eu-west-2 = "snapshots-tool-aurora-eu-west-2-real"
+eu-central-1 = "snapshots-tool-aurora-eu-central-1"
+us-west-1 = "snapshots-tool-aurora-us-west-1"
+eu-west-3 = "snapshots-tool-aurora-eu-west-3"
+ap-south-1 = "snapshots-tool-aurora-ap-south-1"
+ap-southeast-1 = "snapshots-tool-aurora-ap-southeast-1"
+ap-northeast-2 = "snapshots-tool-aurora-ap-northeast-2"
+ca-central-1 = "snapshots-tool-aurora-ca-central-1"
+sa-east-1 = "snapshots-tool-aurora-sa-east-1"
+}
 
 	variable "CodeBucket" {
 				type = string
