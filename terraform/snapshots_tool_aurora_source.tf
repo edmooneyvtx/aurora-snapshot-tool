@@ -49,17 +49,35 @@ sa-east-1 = "snapshots-tool-aurora-sa-east-1"
 module tagging {
   source = "../../modules/tagging_variables"
 }
-
-
 			
 # sns allow topic
 resource "aws_sns_topic" "sns_dest_topic_allow" {
   name = "sns_dest_topic_allow"
+	
+  tags = {
+	Environment = var.environment
+	Terraform   = "true"
+	Cost_Center = module.tagging_variables.tagging_cost_center_di
+	Application = module.tagging_variables.tagging_application_di
+	Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	Project     = module.tagging_variables.project_tag
+	Project_Id  = module.tagging_variables.project_id_tag
+  }
 }
 
 resource "aws_sns_topic_policy" "default" {
   arn = "${sns_dest_topic_allow.arn}"
   policy = "${data.aws_iam_policy_document.sns_dest_topic_allow_policy.json}"
+	
+  tags = {
+    Environment = var.environment
+    Terraform   = "true"
+    Cost_Center = module.tagging_variables.tagging_cost_center_di
+    Application = module.tagging_variables.tagging_application_di
+    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+    Project     = module.tagging_variables.project_tag
+    Project_Id  = module.tagging_variables.project_id_tag
+  }
 }
 
 
@@ -138,6 +156,16 @@ resource "aws_cloudwatch_metric_alarm" "copy_failed" {
 		name = "StateMachineArn"
 		value = "${"Ref: statemachineCopySnapshotsDestAurora"}"
 	]
+	
+	tags = {
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
+	  }
 
 }
 
@@ -153,6 +181,16 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 	threshold                 = "80"
 	alarm_description         = "This metric monitors ec2 cpu utilization"
 	insufficient_data_actions = []
+	
+        tags = {
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
+	  }
 }
 		
 		
@@ -183,8 +221,15 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 	EOF
 
 	  tags = {
-	    tag-key = "tag-value"
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
 	  }
+
 	}
 
           
@@ -225,8 +270,15 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 	EOF
 
 	  tags = {
-	    tag-key = "tag-value"
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
 	  }
+
 	}
 
 	/*
@@ -252,6 +304,17 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 	  }
 	}
 	EOF
+
+	  tags = {
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
+	  }
+
 	}
 
         /*
@@ -277,6 +340,18 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 	  }
 	}
 	EOF
+
+
+	  tags = {
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
+	  }
+
 	}
 
 
@@ -306,8 +381,15 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 	EOF
 
 	  tags = {
-	    tag-key = "tag-value"
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
 	  }
+
 	}
 
 
@@ -335,6 +417,17 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 	  rule      = "${aws_cloudwatch_event_rule.console.name}"
 	  target_id = "SendToSNS"
 	  arn       = "${aws_sns_topic.aws_logins.arn}"
+
+
+	tags = {
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
+	  }
 	}
 
         
@@ -355,12 +448,35 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 	  ]
 	}
 	PATTERN
+
+
+        tags = {
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
+	  }
 	}
 
 	resource "aws_cloudwatch_event_target" "sns" {
 	  rule      = "${aws_cloudwatch_event_rule.console.name}"
 	  target_id = "SendToSNS"
 	  arn       = "${aws_sns_topic.aws_logins.arn}"
+
+
+	 tags = {
+	    Environment = var.environment
+	    Terraform   = "true"
+	    Cost_Center = module.tagging_variables.tagging_cost_center_di
+	    Application = module.tagging_variables.tagging_application_di
+	    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+	    Project     = module.tagging_variables.project_tag
+	    Project_Id  = module.tagging_variables.project_id_tag
+	  }
+
 	}
 
 
