@@ -20,6 +20,19 @@ ca-central-1 = "snapshots-tool-aurora-ca-central-1"
 sa-east-1 = "snapshots-tool-aurora-sa-east-1"
 }
 
+/*
+	  tags = {
+    Environment = var.environment
+    Terraform   = "true"
+    Cost_Center = module.tagging_variables.tagging_cost_center_di
+    Application = module.tagging_variables.tagging_application_di
+    Sub_Systems = module.tagging_variables.tagging_sub_systems_di
+    Project     = module.tagging_variables.project_tag
+    Project_Id  = module.tagging_variables.project_id_tag
+  }
+
+*/
+
 # sns allow 
 /*
 	"snsTopicSnapshotsAuroraToolDest": {
@@ -30,6 +43,14 @@ sa-east-1 = "snapshots-tool-aurora-sa-east-1"
 	"Condition": "SNSTopicIsEmpty",
 	"Type": "AWS::SNS::TopicPolicy",
 */
+			
+
+# include the tagging library
+module tagging {
+  source = "../../modules/tagging_variables"
+}
+
+
 			
 # sns allow topic
 resource "aws_sns_topic" "sns_dest_topic_allow" {
@@ -152,8 +173,7 @@ data "aws_iam_policy_document" "sns_dest_topic_allow_policy" {
 			"Type": "AWS::CloudWatch::Alarm",
 			"Condition": "DeleteOld",
 		
-		
-- complete... below when resources filled out.
+		complete... below when resources filled out.
 		
 */		
 
