@@ -194,11 +194,37 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
 }
 		
 		
-          
+  /*        
           "iamroleSnapshotsAurora": {
 			"Type": "AWS::IAM::Role",
 			"Properties": {
 				"AssumeRolePolicyDocument": {
+					
+*/
+	resource "aws_iam_role" "test_role" {
+	  name = "test_role"
+
+	  assume_role_policy = <<EOF
+	{
+	  "Version": "2012-10-17",
+	  "Statement": [
+	    {
+	      "Action": "sts:AssumeRole",
+	      "Principal": {
+		"Service": "ec2.amazonaws.com"
+	      },
+	      "Effect": "Allow",
+	      "Sid": ""
+	    }
+	  ]
+	}
+	EOF
+
+	  tags = {
+	    tag-key = "tag-value"
+	  }
+	}
+
           
           
           "lambdaCopySnapshotsAurora": {
@@ -208,33 +234,171 @@ resource "aws_cloudwatch_metric_alarm" "delete_old_failed" {
             "lambdaDeleteOldDestAurora": {
 			"Type": "AWS::Lambda::Function",
 			"Condition": "DeleteOld",
-              
+ 
+/*
               
               "iamroleStateExecution": {
 			"Type": "AWS::IAM::Role",
 			"Properties": {
 				"AssumeRolePolicyDocument": {
-          
+*/
+
+	resource "aws_iam_role" "test_role" {
+	  name = "test_role"
+
+	  assume_role_policy = <<EOF
+	{
+	  "Version": "2012-10-17",
+	  "Statement": [
+	    {
+	      "Action": "sts:AssumeRole",
+	      "Principal": {
+		"Service": "ec2.amazonaws.com"
+	      },
+	      "Effect": "Allow",
+	      "Sid": ""
+	    }
+	  ]
+	}
+	EOF
+
+	  tags = {
+	    tag-key = "tag-value"
+	  }
+	}
+
+	/*
           "statemachineCopySnapshotsDestAurora": {
 			"Type": "AWS::StepFunctions::StateMachine",
 			"Properties": {
-        
-        
+ 	*/
+
+	resource "aws_sfn_state_machine" "sfn_state_machine" {
+	  name     = "statemachineCopySnapshotsDestAurora"
+	  role_arn = "${aws_iam_role.iam_for_sfn.arn}"
+
+	  definition = <<EOF
+	{
+	  "Comment": "A Hello World example of the Amazon States Language using an AWS Lambda Function",
+	  "StartAt": "HelloWorld",
+	  "States": {
+	    "HelloWorld": {
+	      "Type": "Task",
+	      "Resource": "${aws_lambda_function.lambda.arn}",
+	      "End": true
+	    }
+	  }
+	}
+	EOF
+	}
+
+        /*
         "statemachineDeleteOldSnapshotsDestAurora": {
 			"Type": "AWS::StepFunctions::StateMachine",
 			"Condition": "DeleteOld",
-          
+	*/
+
+	resource "aws_sfn_state_machine" "sfn_state_machine" {
+	  name     = "statemachineDeleteOldSnapshotsDestAurora"
+	  role_arn = "${aws_iam_role.iam_for_sfn.arn}"
+
+	  definition = <<EOF
+	{
+	  "Comment": "A Hello World example of the Amazon States Language using an AWS Lambda Function",
+	  "StartAt": "HelloWorld",
+	  "States": {
+	    "HelloWorld": {
+	      "Type": "Task",
+	      "Resource": "${aws_lambda_function.lambda.arn}",
+	      "End": true
+	    }
+	  }
+	}
+	EOF
+	}
+
+
+/*
           "iamroleStepInvocation": {
 			"Type": "AWS::IAM::Role",
 			"Properties": {
-        
+*/
+
+	resource "aws_iam_role" "test_role" {
+	  name = "test_role"
+
+	  assume_role_policy = <<EOF
+	{
+	  "Version": "2012-10-17",
+	  "Statement": [
+	    {
+	      "Action": "sts:AssumeRole",
+	      "Principal": {
+		"Service": "ec2.amazonaws.com"
+	      },
+	      "Effect": "Allow",
+	      "Sid": ""
+	    }
+	  ]
+	}
+	EOF
+
+	  tags = {
+	    tag-key = "tag-value"
+	  }
+	}
+
+
+    /*    
+
         "cwEventCopySnapshotsAurora": {
 			"Type": "AWS::Events::Rule",
 			"Properties": {
+*/
+
+	resource "aws_cloudwatch_event_rule" "console" {
+	  name        = "cwEventCopySnapshotsAurora"
+	  description = "Capture each AWS Console Sign In"
+
+	  event_pattern = <<PATTERN
+	{
+	  "detail-type": [
+	    "AWS Console Sign In via CloudTrail"
+	  ]
+	}
+	PATTERN
+	}
+
+	resource "aws_cloudwatch_event_target" "sns" {
+	  rule      = "${aws_cloudwatch_event_rule.console.name}"
+	  target_id = "SendToSNS"
+	  arn       = "${aws_sns_topic.aws_logins.arn}"
+	}
+
         
-        
+        /*
+
         "cwEventDeleteOldSnapshotsAurora": {
 			"Type": "AWS::Events::Rule",
 			"Condition": "DeleteOld",
+*/
+	resource "aws_cloudwatch_event_rule" "console" {
+	  name        = "cwEventCopySnapshotsAurora"
+	  description = "Capture each AWS Console Sign In"
+
+	  event_pattern = <<PATTERN
+	{
+	  "detail-type": [
+	    "AWS Console Sign In via CloudTrail"
+	  ]
+	}
+	PATTERN
+	}
+
+	resource "aws_cloudwatch_event_target" "sns" {
+	  rule      = "${aws_cloudwatch_event_rule.console.name}"
+	  target_id = "SendToSNS"
+	  arn       = "${aws_sns_topic.aws_logins.arn}"
+	}
 
 
