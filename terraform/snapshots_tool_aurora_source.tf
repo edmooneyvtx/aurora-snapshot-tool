@@ -139,6 +139,7 @@ data "aws_iam_policy_document" "sns_dest_topic_allow_policy" {
 
 		
 resource "aws_cloudwatch_metric_alarm" "copy_failed" {
+	alarm_name         = "copy_failed"
 	alarm_description  =  "DB Copy to destination status",
 	actions_enabled  =  "true",
 	comparison_operator  =  "GreaterThanOrEqualToThreshold",
