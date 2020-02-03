@@ -3,6 +3,12 @@
 # Terraform:
 
 
+# add to vars in variables.tf
+# @todo: need to implement the zip functionality for the functions.
+# ensure alerts set up propertly
+# tie configurations together
+# SNS - config
+
 
 /*
 	  tags = {
