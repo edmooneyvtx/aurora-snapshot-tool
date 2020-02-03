@@ -20,6 +20,13 @@ ca-central-1 = "snapshots-tool-aurora-ca-central-1"
 sa-east-1 = "snapshots-tool-aurora-sa-east-1"
 }
 
+
+	variable "LambdaFunctionName" {
+				type = string
+				description = "Name of the payload for lambda"
+				default = ""
+	}
+
 	variable "CodeBucket" {
 				type = string
 				default =  "DEFAULT_BUCKET"
