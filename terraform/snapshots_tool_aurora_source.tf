@@ -9,14 +9,7 @@
 # tie configurations together
 # SNS - config
 
-/*
-	
-
-
-	
-
 */
-
 
 /*
 	  tags = {
